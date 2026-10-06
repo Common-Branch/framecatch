@@ -19,6 +19,25 @@ Coming soon.
 
 Coming soon.
 
+## Development
+
+### Prerequisites
+
+- [Rust](https://rustup.rs/)
+- [Node.js](https://nodejs.org/) (LTS)
+- Windows: [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) with the "Desktop development with C++" workload, and WebView2 (preinstalled on Windows 11)
+
+See the [Tauri prerequisites](https://tauri.app/start/prerequisites/) for other platforms.
+
+### Run
+
+```
+npm install
+npm run tauri dev
+```
+
+The first Rust build takes several minutes.
+
 ## Contributing
 
 Ideas, bug reports, and pull requests are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. If you have any issues with the project, feel free to open an issue.
