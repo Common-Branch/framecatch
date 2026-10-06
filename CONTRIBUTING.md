@@ -2,7 +2,7 @@
 
 ## Setup
 
-Currently there are no files to install. This section will get updated when the tech stack is chosen.
+See the Development section in the [README](README.md).
 
 ## Branches
 
@@ -46,7 +46,7 @@ docs: add contributing guidelines
 
 ## Code style
 
-To be decided when the tech stack is chosen.
+To be decided.
 
 ## Docs
 
@@ -54,6 +54,8 @@ Docs are updated in the same pull request as the code they describe.
 
 Writing rules:
 
+- Write "Framecatch" in sentences and `framecatch` in commands and paths.
+- Use numbered lists only for ordered steps.
 - English only. Short, plain sentences. No em dashes, no emojis, no badges.
 - One `#` title per file. Sections use `##`, subsections use `###`.
 - Headings use sentence case: "Building from source", not "Building From Source".
