@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/framecatch-logo.png" alt="Framecatch" width="600">
+</p>
+
 # Framecatch
 
 Framecatch is an open-source tool that captures your entire screen with the press of a hotkey.
