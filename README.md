@@ -6,10 +6,12 @@ Framecatch is an open-source tool that captures your entire screen with the pres
 
 ## Features
 
-- User-defined global hotkey listener
-- Full-screen capture when the hotkey is pressed
+- Global hotkey listener with a multi-action registry
+- Active-screen capture at full physical resolution
+- Multi-monitor support based on cursor position
+- Timestamped PNG save to Desktop
 
-More features (for example, region capture) are planned, although for now the focus is on the core fundamentals.
+More features (for example, region capture and recording) are planned, although for now the focus is on the core fundamentals.
 
 ## Installation
 
@@ -17,7 +19,10 @@ Coming soon.
 
 ## Usage
 
-Coming soon.
+1. Run the app with `npm run dev`.
+2. Focus any other app.
+3. Press `CommandOrControl+Shift+S`.
+4. Open the new `framecatch-<timestamp>.png` file on the Desktop.
 
 ## Development
 
