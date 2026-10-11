@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="assets/framecatch-logo.png" alt="Framecatch" width="600">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/framecatch-logo-white.png">
+    <img src="assets/framecatch-logo-dark.png" alt="Framecatch" width="600">
+  </picture>
 </p>
 
 # Framecatch
