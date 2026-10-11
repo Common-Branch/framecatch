@@ -1,4 +1,4 @@
-# framecatch
+# Framecatch
 
 Framecatch is an open-source tool that captures your entire screen with the press of a hotkey.
 
@@ -23,20 +23,14 @@ Coming soon.
 
 ### Prerequisites
 
-- [Rust](https://rustup.rs/)
 - [Node.js](https://nodejs.org/) (LTS)
-- Windows: [Microsoft C++ Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) with the "Desktop development with C++" workload, and WebView2 (preinstalled on Windows 11)
-
-See the [Tauri prerequisites](https://tauri.app/start/prerequisites/) for other platforms.
 
 ### Run
 
 ```
 npm install
-npm run tauri dev
+npm run dev
 ```
-
-The first Rust build takes several minutes.
 
 ## Contributing
 
