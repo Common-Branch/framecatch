@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Framecatch</title>
+        <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
+        />
+    </head>
+    <body style="margin: 0; width: 100vw; height: 100vh; overflow: hidden">
+        <script type="module" src="/src/overlay.ts"></script>
+        <img
+            id="screenshot"
+            style="
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                filter: brightness(0.5);
+            "
+        />
+        <div id="mouse_select" style="position: absolute"></div>
+    </body>
+</html>
