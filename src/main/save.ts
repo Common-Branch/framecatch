@@ -1,12 +1,14 @@
 import { writeFile } from 'fs/promises'
-import { app } from 'electron'
 import { join } from 'path'
+import { getSettings } from './settings'
+import { mkdir } from 'fs/promises'
 
 export async function savePng(png: Buffer): Promise<string> {
-  const desktop = app.getPath('desktop')
-  const filename = `framecatch-${Date.now()}.png`
-  const file = join(desktop, filename)
+    const { saveFolder } = getSettings()
+    await mkdir(saveFolder, { recursive: true })
+    const filename = `framecatch-${Date.now()}.png`
+    const file = join(saveFolder, filename)
 
-  await writeFile(file, png)
-  return file
+    await writeFile(file, png)
+    return file
 }
