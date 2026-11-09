@@ -16,7 +16,7 @@ Framecatch is an open-source tool that captures your entire screen with the pres
 - Global hotkey listener with a multi-action registry
 - Active-screen capture at full physical resolution
 - Multi-monitor support based on cursor position
-- Timestamped PNG save to Desktop
+- Timestamped PNG save to the currently set save folder.
 
 More features (for example recording) are planned and are currently being worked on.
 
