@@ -28,8 +28,8 @@ Coming soon.
 
 1. Run the app with `npm run dev`.
 2. Focus any other app.
-3. Press `CommandOrControl+Shift+S`.
-4. Open the new `framecatch-<timestamp>.png` file on the Desktop.
+3. Press `CommandOrControl+Shift+S` for area screenshot, `CommandOrControl+Shift+F` for a fullscreen screenshot.
+4. Open the new `framecatch-<timestamp>.png` file that is located in the currently set save folder.
 
 ## Development
 
