@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Settings } from '../../shared/types'
+import { HotkeyInput } from './HotkeyInput'
 
 function App(): React.JSX.Element {
     const [settings, setSettings] = useState<Settings | null>(null)
@@ -28,6 +29,11 @@ function App(): React.JSX.Element {
             <p>Save screenshots to:</p>
             <code>{settings.saveFolder}</code>
             <button onClick={handleChooseFolder}>Change folder</button>
+            <br />
+            <p>Region screenshot hotkey:</p>
+            <HotkeyInput accelerator={settings.screenshotRegionHotkey} />
+            <p>Fullscreen screenshot hotkey:</p>
+            <HotkeyInput accelerator={settings.screenshotFullHotkey} />
         </main>
     )
 }
