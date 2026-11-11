@@ -13,7 +13,7 @@ function App(): React.JSX.Element {
         if (folder === null) return
 
         const next: Settings = { saveFolder: folder }
-        await window.settingsApi.saveSettings()
+        await window.settingsApi.saveSettings(next)
         setSettings(next)
     }
 

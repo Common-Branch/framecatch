@@ -1,3 +1,5 @@
+import type { Settings } from '../shared/types'
+
 export interface OverlayApi {
     crop(rect: { x: number; y: number; width: number; height: number }): void
     close(): void
@@ -6,7 +8,7 @@ export interface OverlayApi {
 
 export interface SettingsApi {
     getSettings(): Promise<Settings>
-    saveSettings(): Promise<void>
+    saveSettings(next: Settings): Promise<void>
     chooseFolder(): Promise<string | null>
 }
 
