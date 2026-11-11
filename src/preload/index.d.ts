@@ -8,7 +8,7 @@ export interface OverlayApi {
 
 export interface SettingsApi {
     getSettings(): Promise<Settings>
-    saveSettings(next: Settings): Promise<void>
+    saveSettings(next: Settings): Promise<boolean>
     chooseFolder(): Promise<string | null>
 }
 

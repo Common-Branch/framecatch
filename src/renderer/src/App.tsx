@@ -9,12 +9,15 @@ function App(): React.JSX.Element {
     }, [])
 
     async function handleChooseFolder(): Promise<void> {
-        const folder = await window.settingsApi.chooseFolder()
-        if (folder === null) return
+        const saveFolder = await window.settingsApi.chooseFolder()
+        if (saveFolder === null || settings === null) return
 
-        const next: Settings = { saveFolder: folder }
-        await window.settingsApi.saveSettings(next)
-        setSettings(next)
+        const next: Settings = { ...settings, saveFolder: saveFolder }
+        const answer = await window.settingsApi.saveSettings(next)
+
+        if (answer) {
+            setSettings(next)
+        }
     }
 
     if (settings === null) return <p>Loading...</p>

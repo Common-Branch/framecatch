@@ -1,23 +1,18 @@
-import { globalShortcut, dialog } from 'electron'
+import { globalShortcut } from 'electron'
 
 export type ActionId = 'screenshot-full' | 'screenshot-region' | 'record-full'
 const current = new Map<ActionId, string>()
 
 export function registerAction(id: ActionId, accelerator: string, handler: () => void): boolean {
     const old = current.get(id)
-    if (old && old !== accelerator) globalShortcut.unregister(old)
+    if (old === accelerator) return true
 
     const ok = globalShortcut.register(accelerator, handler)
-    if (ok) {
-        current.set(id, accelerator)
-    } else {
-        dialog.showErrorBox(
-            'Shortcut unavailable',
-            `${accelerator} is already used by another app.`
-        )
-    }
+    if (!ok) return false
 
-    return ok
+    if (old) globalShortcut.unregister(old)
+    current.set(id, accelerator)
+    return true
 }
 
 export function unregisterAction(id: ActionId): void {

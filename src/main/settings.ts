@@ -8,7 +8,11 @@ function getSettingsPath(): string {
 }
 
 function getDefaults(): Settings {
-    return { saveFolder: join(app.getPath('pictures'), 'framecatch') }
+    return {
+        saveFolder: join(app.getPath('pictures'), 'framecatch'),
+        screenshotRegionHotkey: 'CommandOrControl+Shift+S',
+        screenshotFullHotkey: 'CommandOrControl+Shift+F'
+    }
 }
 
 let current: Settings | null = null
