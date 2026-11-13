@@ -18,6 +18,11 @@ export function HotkeyInput({ accelerator, onChange }: HotkeyInputProps): React.
             onClick={() => setRecording(!recording)}
             onKeyDown={(e) => {
                 if (recording) {
+                    e.preventDefault()
+                    if (e.code === 'Escape') {
+                        setRecording(false)
+                        return
+                    }
                     const result = toAccelerator(e)
                     if (result !== null) {
                         onChange(result)
