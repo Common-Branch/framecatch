@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import type { Settings } from '../../shared/types'
 import { HotkeyInput } from './HotkeyInput'
 
+type HotkeyField = 'screenshotRegionHotkey' | 'screenshotFullHotkey'
+
 function App(): React.JSX.Element {
     const [settings, setSettings] = useState<Settings | null>(null)
 
@@ -21,6 +23,20 @@ function App(): React.JSX.Element {
         }
     }
 
+    async function handleHotkeyChange(field: HotkeyField, accelerator: string): Promise<void> {
+        if (settings === null) return
+        const next: Settings = { ...settings, [field]: accelerator }
+
+        try {
+            const answer = await window.settingsApi.saveSettings(next)
+            if (answer) {
+                setSettings(next)
+            }
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
     if (settings === null) return <p>Loading...</p>
 
     return (
@@ -31,9 +47,17 @@ function App(): React.JSX.Element {
             <button onClick={handleChooseFolder}>Change folder</button>
             <br />
             <p>Region screenshot hotkey:</p>
-            <HotkeyInput accelerator={settings.screenshotRegionHotkey} />
+            <HotkeyInput
+                accelerator={settings.screenshotRegionHotkey}
+                onChange={(accelerator) =>
+                    handleHotkeyChange('screenshotRegionHotkey', accelerator)
+                }
+            />
             <p>Fullscreen screenshot hotkey:</p>
-            <HotkeyInput accelerator={settings.screenshotFullHotkey} />
+            <HotkeyInput
+                accelerator={settings.screenshotFullHotkey}
+                onChange={(accelerator) => handleHotkeyChange('screenshotFullHotkey', accelerator)}
+            />
         </main>
     )
 }
