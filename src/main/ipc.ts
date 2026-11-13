@@ -1,7 +1,7 @@
 import { dialog, ipcMain } from 'electron'
 import type { Settings } from '../shared/types'
 import { getSettings, saveSettings } from './settings'
-import { registerAction } from './hotkey'
+import { pauseHotkeys, registerAction, resumeHotkeys } from './hotkey'
 import { captureRegion, captureFullscreen } from './actions'
 
 export function registerIpc(): void {
@@ -43,6 +43,9 @@ export function registerIpc(): void {
             return false
         }
     })
+
+    ipcMain.on('hotkeys:pause', () => pauseHotkeys())
+    ipcMain.on('hotkeys:resume', () => resumeHotkeys())
 
     ipcMain.handle('settings:choose-folder', async () => {
         const result = await dialog.showOpenDialog({

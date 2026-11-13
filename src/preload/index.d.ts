@@ -10,6 +10,8 @@ export interface SettingsApi {
     getSettings(): Promise<Settings>
     saveSettings(next: Settings): Promise<boolean>
     chooseFolder(): Promise<string | null>
+    pauseHotkeys(): void
+    resumeHotkeys(): void
 }
 
 declare global {

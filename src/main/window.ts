@@ -2,6 +2,7 @@ import { app, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { resumeHotkeys } from './hotkey'
 
 let mainWindow: BrowserWindow | null = null
 let isQuitting = false
@@ -23,6 +24,12 @@ export function createWindow(): void {
     mainWindow = win
 
     win.on('ready-to-show', () => win.show())
+
+    // The renderer may never send 'hotkeys:resume' if the window loses focus, reloads or crashes.
+    win.on('blur', resumeHotkeys)
+    win.webContents.on('did-start-loading', resumeHotkeys)
+    win.webContents.on('render-process-gone', resumeHotkeys)
+
     win.on('close', (event) => {
         if (isQuitting) return
         event.preventDefault()

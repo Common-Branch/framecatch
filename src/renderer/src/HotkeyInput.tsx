@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toKeyLabel } from './keyLabels'
 import { toAccelerator } from './accelerator'
 
@@ -6,6 +6,12 @@ type HotkeyInputProps = { accelerator: string; onChange: (accelerator: string) =
 
 export function HotkeyInput({ accelerator, onChange }: HotkeyInputProps): React.JSX.Element {
     const [recording, setRecording] = useState<boolean>(false)
+
+    useEffect(() => {
+        if (!recording) return
+        window.settingsApi.pauseHotkeys()
+        return () => window.settingsApi.resumeHotkeys()
+    }, [recording])
 
     return (
         <button
