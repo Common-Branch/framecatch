@@ -1,7 +1,7 @@
 import { dialog, ipcMain } from 'electron'
 import type { Settings } from '../shared/types'
 import { getSettings, saveSettings } from './settings'
-import { pauseHotkeys, registerAction, resumeHotkeys } from './hotkey'
+import { applyHotkeys, pauseHotkeys, resumeHotkeys } from './hotkey'
 import { captureRegion, captureFullscreen } from './actions'
 
 export function registerIpc(): void {
@@ -20,28 +20,27 @@ export function registerIpc(): void {
             throw new Error('Invalid settings')
         }
 
-        const registerScreenshotRegion = registerAction(
-            'screenshot-region',
-            next.screenshotRegionHotkey,
-            captureRegion
-        )
-        const registerScreenshotFull = registerAction(
-            'screenshot-full',
-            next.screenshotFullHotkey,
-            captureFullscreen
-        )
+        const failed = applyHotkeys([
+            {
+                id: 'screenshot-region',
+                accelerator: next.screenshotRegionHotkey,
+                handler: captureRegion
+            },
+            {
+                id: 'screenshot-full',
+                accelerator: next.screenshotFullHotkey,
+                handler: captureFullscreen
+            }
+        ])
 
-        if (registerScreenshotRegion && registerScreenshotFull) {
+        if (failed.length === 0) {
             await saveSettings({
                 saveFolder: next.saveFolder,
                 screenshotRegionHotkey: next.screenshotRegionHotkey,
                 screenshotFullHotkey: next.screenshotFullHotkey
             })
-
-            return true
-        } else {
-            return false
         }
+        return failed
     })
 
     ipcMain.on('hotkeys:pause', () => pauseHotkeys())

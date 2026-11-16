@@ -16,9 +16,9 @@ function App(): React.JSX.Element {
         if (saveFolder === null || settings === null) return
 
         const next: Settings = { ...settings, saveFolder: saveFolder }
-        const answer = await window.settingsApi.saveSettings(next)
+        const failed = await window.settingsApi.saveSettings(next)
 
-        if (answer) {
+        if (failed.length === 0) {
             setSettings(next)
         }
     }
@@ -28,8 +28,8 @@ function App(): React.JSX.Element {
         const next: Settings = { ...settings, [field]: accelerator }
 
         try {
-            const answer = await window.settingsApi.saveSettings(next)
-            if (answer) {
+            const failed = await window.settingsApi.saveSettings(next)
+            if (failed.length === 0) {
                 setSettings(next)
             }
         } catch (e) {
