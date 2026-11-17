@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest'
 import { toAccelerator } from './accelerator'
 
-// A key press with no modifiers held. Each test turns on what it needs.
 const none = { ctrlKey: false, shiftKey: false, altKey: false }
 
 describe('toAccelerator', () => {

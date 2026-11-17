@@ -1,16 +1,14 @@
 name: CI
 
-# Runs on every pull request and on every push to main.
 on:
   pull_request:
   push:
     branches: [main]
 
-# The workflow only reads the code, it never writes to the repo.
 permissions:
   contents: read
 
-# A new push to the same pull request cancels the run that is still going.
+# Cancel the older run when a new commit is pushed to the same branch.
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
@@ -24,7 +22,6 @@ jobs:
         with:
           node-version: 26
           cache: npm
-      # npm ci installs exactly what package-lock.json says, nothing newer.
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck

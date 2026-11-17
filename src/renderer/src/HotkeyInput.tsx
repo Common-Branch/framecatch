@@ -23,7 +23,6 @@ export function HotkeyInput({
         return () => window.settingsApi.resumeHotkeys()
     }, [recording])
 
-    // The states only React knows become class names. app.css styles them.
     let className = 'hotkey'
     if (recording) className += ' recording'
     if (conflict) className += ' conflict'

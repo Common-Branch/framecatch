@@ -21,11 +21,10 @@ let current: Settings | null = null
 export async function loadSettings(): Promise<void> {
     try {
         const text = await readFile(getSettingsPath(), 'utf-8')
-        // Missing fields come from the defaults, so a file from an older version keeps its values.
-        // A field with the wrong type makes parse throw, and the whole file is ignored.
+        // Defaults fill in fields that older versions didn't have. A wrong type resets everything.
         current = settingsSchema.parse({ ...getDefaults(), ...JSON.parse(text) })
     } catch (error) {
-        // No file yet is normal on the first start. Anything else means the file is broken.
+        // ENOENT just means first start, no file yet.
         if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
             console.warn('Settings file is invalid, using defaults instead.', error)
         }

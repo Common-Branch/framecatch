@@ -10,7 +10,6 @@ const hotkeyFields: HotkeyField[] = ['screenshotRegionHotkey', 'screenshotFullHo
 function App(): React.JSX.Element {
     const [settings, setSettings] = useState<Settings | null>(null)
     const [conflict, setConflict] = useState<Conflict | null>(null)
-    // True while a hotkey save is in progress. Both hotkeys are disabled until it ends.
     const [saving, setSaving] = useState(false)
 
     useEffect(() => {
@@ -32,7 +31,7 @@ function App(): React.JSX.Element {
     async function handleHotkeyChange(field: HotkeyField, accelerator: string): Promise<void> {
         if (settings === null) return
 
-        // Main throws on two equal hotkeys, so catch a clash with our own hotkeys here first.
+        // Main rejects two equal hotkeys, so show the conflict here instead.
         const usedByOther = hotkeyFields.some(
             (other) => other !== field && settings[other] === accelerator
         )
@@ -48,7 +47,7 @@ function App(): React.JSX.Element {
             const failed = await window.settingsApi.saveSettings(next)
             if (failed.length === 0) {
                 setSettings(next)
-                // Clear the red only if it belonged to this hotkey.
+                // Only clear the conflict if it was this hotkey's.
                 setConflict((current) => (current?.field === field ? null : current))
             } else {
                 setConflict({ field, accelerator })
@@ -56,7 +55,6 @@ function App(): React.JSX.Element {
         } catch (e) {
             console.error(e)
         } finally {
-            // Runs after the save, whether it worked, failed or threw.
             setSaving(false)
         }
     }

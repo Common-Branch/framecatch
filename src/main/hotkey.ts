@@ -17,16 +17,14 @@ export function registerAction(id: ActionId, accelerator: string, handler: () =>
     return true
 }
 
-// All or nothing: either every change is applied, or everything stays as it was.
-// Returns the ids that failed to register. An empty array means every change was applied.
+// All or nothing: if one hotkey fails, none of them change. Returns the ids that failed.
 export function applyHotkeys(changes: HotkeyChange[]): ActionId[] {
     const changing = changes.filter(
         (change) => current.get(change.id)?.accelerator !== change.accelerator
     )
     const newAccelerators = changing.map((change) => change.accelerator)
 
-    // Swaps: a key we hold for one action can be the new key of another. Release it first,
-    // otherwise registering it fails because we still hold it ourselves.
+    // For swaps: we can't register a key we still hold ourselves, so release it first.
     const released: Registration[] = []
     for (const { id } of changing) {
         const old = current.get(id)
@@ -40,7 +38,7 @@ export function applyHotkeys(changes: HotkeyChange[]): ActionId[] {
         }
     }
 
-    // Make before break: register every new key while the old keys are still held.
+    // Register the new keys before dropping the old ones, so a failure can roll back.
     const registered: string[] = []
     const failed: ActionId[] = []
     for (const { id, accelerator, handler } of changing) {
@@ -51,7 +49,6 @@ export function applyHotkeys(changes: HotkeyChange[]): ActionId[] {
         }
     }
 
-    // Something failed: undo the new keys and take the released ones back.
     if (failed.length > 0) {
         for (const accelerator of registered) {
             globalShortcut.unregister(accelerator)
@@ -62,7 +59,6 @@ export function applyHotkeys(changes: HotkeyChange[]): ActionId[] {
         return failed
     }
 
-    // Everything worked: drop the old keys, unless another action now uses them.
     for (const { id, accelerator, handler } of changing) {
         const old = current.get(id)?.accelerator
         if (old && !newAccelerators.includes(old) && globalShortcut.isRegistered(old)) {
@@ -81,14 +77,14 @@ export function unregisterAction(id: ActionId): void {
     }
 }
 
-// Pausing only unregisters from the OS. `current` keeps the list, so resume knows what to restore.
+// Keeps `current` as it is, so resume knows what to restore.
 export function pauseHotkeys(): void {
     for (const { accelerator } of current.values()) {
         globalShortcut.unregister(accelerator)
     }
 }
 
-// Saving while paused registers the changed hotkey already, so skip anything that is registered.
+// A save while paused already registered the new key, so skip it.
 export function resumeHotkeys(): void {
     for (const { accelerator, handler } of current.values()) {
         if (!globalShortcut.isRegistered(accelerator)) {
