@@ -2,9 +2,19 @@ import { useEffect, useState } from 'react'
 import { toKeyLabel } from './keyLabels'
 import { toAccelerator } from './accelerator'
 
-type HotkeyInputProps = { accelerator: string; onChange: (accelerator: string) => void }
+type HotkeyInputProps = {
+    accelerator: string
+    conflict: boolean
+    disabled: boolean
+    onChange: (accelerator: string) => void
+}
 
-export function HotkeyInput({ accelerator, onChange }: HotkeyInputProps): React.JSX.Element {
+export function HotkeyInput({
+    accelerator,
+    conflict,
+    disabled,
+    onChange
+}: HotkeyInputProps): React.JSX.Element {
     const [recording, setRecording] = useState<boolean>(false)
 
     useEffect(() => {
@@ -13,8 +23,15 @@ export function HotkeyInput({ accelerator, onChange }: HotkeyInputProps): React.
         return () => window.settingsApi.resumeHotkeys()
     }, [recording])
 
+    // The states only React knows become class names. app.css styles them.
+    let className = 'hotkey'
+    if (recording) className += ' recording'
+    if (conflict) className += ' conflict'
+
     return (
         <button
+            className={className}
+            disabled={disabled}
             onClick={() => setRecording(!recording)}
             onKeyDown={(e) => {
                 if (recording) {
@@ -32,9 +49,17 @@ export function HotkeyInput({ accelerator, onChange }: HotkeyInputProps): React.
             }}
             onBlur={() => setRecording(false)}
         >
-            {recording
-                ? 'Listening'
-                : accelerator.split('+').map((part) => <kbd key={part}>{toKeyLabel(part)}</kbd>)}
+            {recording ? (
+                <kbd className="keycap">
+                    <span className="keycap-face">Press keys</span>
+                </kbd>
+            ) : (
+                accelerator.split('+').map((part) => (
+                    <kbd key={part} className="keycap">
+                        <span className="keycap-face">{toKeyLabel(part)}</span>
+                    </kbd>
+                ))
+            )}
         </button>
     )
 }

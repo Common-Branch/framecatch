@@ -1,0 +1,141 @@
+/* Temporary dark background until the window shell from the design (M2.1). */
+body {
+    margin: 24px;
+    background: #131416;
+    color: #eeedea;
+    font-family: 'Host Grotesk', system-ui, sans-serif;
+}
+
+/*
+ * Every keycap copies the "Keycap states" frame in Figma. One key has three layers:
+ * 1. .keycap        the dark well the key sits in (56 x 36, radius 10)
+ * 2. box-shadow     the base under the face, visible as a 3px lip below it
+ * 3. .keycap-face   the key face with the label (radius 8, noise texture)
+ * Both the well and the face have a gradient border, drawn by ::before.
+ */
+
+/* The hotkey button itself is invisible. Only the keycaps inside it are drawn. */
+.hotkey {
+    display: inline-flex;
+    gap: 8px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.hotkey:focus-visible {
+    outline: 2px solid #9db8ff;
+    outline-offset: 4px;
+    border-radius: 12px;
+}
+
+/* Layer 1: the well. Its colors never change between states. */
+.keycap {
+    position: relative;
+    display: inline-block;
+    padding: 2px 2px 5px;
+    border-radius: 10px;
+    background: linear-gradient(#020203, #1c1d20);
+}
+
+/* The face colors. Each state below only changes these variables. */
+.keycap-face {
+    --face-top: #26272b;
+    --face-bottom: #1d1e21;
+    --face-border: #45464c;
+    --face-base: #060607;
+    --face-text: #eeedea;
+
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+    min-width: 36px;
+    height: 29px;
+    padding: 5px 14px 4px;
+    border-radius: 8px;
+    background: url('./noise.svg'), linear-gradient(var(--face-top), var(--face-bottom));
+    /* Layer 2: the base is a copy of the face moved 3px down. */
+    box-shadow: 0 3px 0 var(--face-base);
+    color: var(--face-text);
+    font:
+        500 14px/20px 'Host Grotesk',
+        system-ui,
+        sans-serif;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/*
+ * Gradient borders. CSS borders cannot be gradients with round corners, so ::before
+ * paints a gradient over the whole element and the mask cuts out everything except
+ * a 1px ring at the edge (the padding).
+ */
+.keycap::before,
+.keycap-face::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    mask:
+        linear-gradient(#000 0 0) content-box exclude,
+        linear-gradient(#000 0 0);
+    pointer-events: none;
+}
+
+/* Well border: invisible at the top, a faint light edge at the bottom. */
+.keycap::before {
+    background: linear-gradient(rgb(28 29 32 / 0), #2e2f33);
+}
+
+/* Face border: bright at the top, fading out 60% of the way down. */
+.keycap-face::before {
+    background: linear-gradient(var(--face-border), transparent 60%);
+}
+
+/* Hover: browser state, CSS only. */
+.hotkey:hover .keycap-face {
+    --face-top: #2e2f34;
+    --face-bottom: #242529;
+    --face-border: #55565d;
+}
+
+/* Pressed: browser state, CSS only. The face moves 2px down, the base stays. */
+.hotkey:active .keycap-face {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--face-base);
+}
+
+/* Conflict: set by React through the "conflict" class. */
+.hotkey.conflict .keycap-face {
+    --face-top: #3a1d22;
+    --face-bottom: #2d161b;
+    --face-border: #e8707c;
+    --face-base: #170609;
+    --face-text: #ffb3ba;
+}
+
+/* Recording: set by React through the "recording" class. Comes after conflict, so it wins. */
+.hotkey.recording .keycap-face {
+    --face-top: #1e2c5c;
+    --face-bottom: #19244b;
+    --face-border: #9db8ff;
+    --face-base: #0a1233;
+    --face-text: #9db8ff;
+    min-width: 108px;
+}
+
+/* Disabled: browser state, set by React through the disabled attribute. */
+.hotkey:disabled {
+    cursor: default;
+    pointer-events: none;
+}
+
+.hotkey:disabled .keycap {
+    opacity: 0.45;
+}
+
+.hotkey:disabled .keycap-face {
+    --face-text: #5f5e5a;
+}
