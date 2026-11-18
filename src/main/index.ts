@@ -1,11 +1,11 @@
 import { app, globalShortcut } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { createWindow, showMainWindow } from './window'
-import { registerAction } from './hotkey'
-import { captureFullscreen, captureRegion } from './actions'
 import { createTray } from './tray'
-import { loadSettings } from './settings'
+import { getSettings, loadSettings } from './settings'
 import { registerIpc } from './ipc'
+import { registerAction } from './hotkey'
+import { captureRegion, captureFullscreen } from './actions'
 
 app.whenReady().then(async () => {
     await loadSettings()
@@ -19,12 +19,11 @@ app.whenReady().then(async () => {
     })
 
     createWindow()
-
-    // TODO - Settings
     createTray(showMainWindow)
 
-    registerAction('screenshot-region', 'CommandOrControl+Shift+S', captureRegion)
-    registerAction('screenshot-full', 'CommandOrControl+Shift+F', captureFullscreen)
+    const currentSettings = getSettings()
+    registerAction('screenshot-region', currentSettings.screenshotRegionHotkey, captureRegion)
+    registerAction('screenshot-full', currentSettings.screenshotFullHotkey, captureFullscreen)
 
     app.on('activate', () => {
         showMainWindow()
